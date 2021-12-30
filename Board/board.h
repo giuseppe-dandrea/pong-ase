@@ -4,12 +4,23 @@
 #include "LPC17xx.h"
 #include "../GLCD/GLCD.h"
 
-static const uint16_t board_min_x = 5;
-static const uint16_t board_max_x = 235;
-static const uint16_t board_min_y = 5;
-static const uint16_t board_max_y = 320;
-static const uint16_t border_thickness = 5;
-static const uint16_t board_background_color = Black;
+#define BOARD_MIN_X 5
+#define BOARD_MAX_X  235
+#define BOARD_MIN_Y  5
+#define BOARD_MAX_Y  320
+#define BORDER_THICKNESS  5
+#define BOARD_BACKGROUND_COLOR  Black
+
+#define SCORE_X  BOARD_MIN_X
+#define SCORE_Y  (BOARD_MAX_Y - 16) / 2
+#define BEST_SCORE_X  BOARD_MAX_X - 4 * 8
+#define BEST_SCORE_Y  BOARD_MIN_Y
+#define SCORE_NUMBER_WIDTH  9
+#define SCORE_NUMBER_HEIGHT  17
+#define SCORE_MAX_X  SCORE_X + SCORE_NUMBER_WIDTH * 4
+#define SCORE_MAX_Y  SCORE_Y + SCORE_NUMBER_HEIGHT
+#define BEST_SCORE_MAX_X  BEST_SCORE_X + SCORE_NUMBER_WIDTH * 4
+#define BEST_SCORE_MAX_Y  BEST_SCORE_Y + SCORE_NUMBER_HEIGHT
 
 void draw_initial_game_board(void);
 void increase_score(void);

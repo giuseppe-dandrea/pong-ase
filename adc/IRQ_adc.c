@@ -20,12 +20,11 @@
 
 unsigned short AD_current;
 uint16_t potentiometer;
-uint16_t potentiometer_tmp = board_min_x;
-uint16_t potentiometer_last = board_min_x;		/* Last converted value               */
-extern uint16_t paddle_length;
+uint16_t potentiometer_tmp = BOARD_MIN_X;
+uint16_t potentiometer_last = BOARD_MIN_X;		/* Last converted value               */
 
 uint16_t map_potentiometer_to_x_pos(unsigned short potentiometer) {
-	return ((board_max_x - paddle_length - border_thickness) * potentiometer / 0xFFF) + board_min_x;
+	return ((BOARD_MAX_X - PADDLE_LENGTH - BORDER_THICKNESS) * potentiometer / 0xFFF) + BOARD_MIN_X;
 }
 
 void ADC_IRQHandler(void) {
