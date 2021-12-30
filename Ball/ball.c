@@ -1,4 +1,5 @@
 #include "ball.h"
+#include "../Pong/Pong.h"
 #include "../Board/board.h"
 #include "../Paddle/paddle.h"
 #include "../GLCD/GLCD.h"
@@ -71,7 +72,7 @@ uint8_t ball_detect_collision() {
 		return 2;
 	} else if (ball_y + ball_y_speed + BALL_SIZE >= BOARD_MAX_Y) { // LOWER WALL
 		return 4;
-	} else if (ball_y + ball_y_speed + BALL_SIZE >= PADDLE_Y ) {
+	} else if (ball_y + ball_y_speed + BALL_SIZE >= PADDLE_Y  && ball_y + ball_y_speed <= PADDLE_Y + PADDLE_THICKNESS) {
 		if (ball_x + BALL_SIZE >= paddle_x && ball_x <= paddle_x + PADDLE_LENGTH) { // PADDLE
 			if (ball_y_speed > 0) // Bounce only if the ball is falling
 				return 5;
@@ -90,8 +91,10 @@ uint8_t ball_detect_collision() {
 void ball_handle_collision(uint8_t collision_wall) {
 	if (collision_wall == 1 || collision_wall == 3)
 		ball_x_speed = -ball_x_speed;
-	else if (collision_wall == 2 || collision_wall == 4)
+	else if (collision_wall == 2)
 		ball_y_speed = -ball_y_speed;
+	else if (collision_wall == 4)
+		pong_game_lost();
 	else if (collision_wall == 5) {
 		//ball_y_speed = -ball_y_speed;
 		ball_handle_paddle_collision();

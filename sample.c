@@ -35,7 +35,7 @@ extern uint8_t ScaleFlag; // <- ScaleFlag needs to visible in order for the emul
 uint8_t button_pressed = 4;
 
 // TODO: add buzzer sound
-// TODO: add lose game, and button to pause, start, restart
+// TODO: add button to pause, start, restart
 
 int main(void)
 {
