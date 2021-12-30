@@ -3,6 +3,8 @@
 #include "../Paddle/paddle.h"
 #include "../Ball/ball.h"
 #include "../GLCD_Extended/GLCD_Extended.h"
+#include <stdlib.h>
+#include <time.h>
 
 
 void pong_main_menu() {	
@@ -14,6 +16,7 @@ void pong_main_menu() {
 void pong_initialize_game() {
 	initialize_ball();
 	draw_initial_game_board();
+	srand(time(NULL));
 }
 
 void pong_main_game_cycle() {

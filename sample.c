@@ -27,8 +27,6 @@
 #include "RIT/RIT.h"
 #include "ADC/adc.h"
 
-int x, y;
-
 
 #ifdef SIMULATOR
 extern uint8_t ScaleFlag; // <- ScaleFlag needs to visible in order for the emulator to find the symbol (can be placed also inside system_LPC17xx.h but since it is RO, it needs more work)
@@ -36,8 +34,6 @@ extern uint8_t ScaleFlag; // <- ScaleFlag needs to visible in order for the emul
 
 uint8_t button_pressed = 4;
 
-// TODO: Refactor constants! Make them uppercase and define!
-// TODO: add custom bouncing angle to paddle
 // TODO: add buzzer sound
 // TODO: add lose game, and button to pause, start, restart
 

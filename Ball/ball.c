@@ -25,6 +25,42 @@ void initialize_ball() {
 
 }
 
+void ball_handle_paddle_collision() {
+	int ball_switch_position;
+	int ball_relative_position = ball_x - paddle_x;
+	if (ball_relative_position < 0)
+		ball_relative_position += BALL_SIZE;
+	else if (ball_relative_position > PADDLE_LENGTH)
+		ball_relative_position -= BALL_SIZE;
+	else
+		ball_relative_position += BALL_SIZE / 2;
+	
+	ball_switch_position = ball_relative_position * 5 / PADDLE_LENGTH;
+	
+	switch (ball_switch_position) {
+		case 0:
+			ball_x_speed = -7;
+			ball_y_speed = -3;
+			break;
+		case 1:
+			ball_x_speed = -5;
+			ball_y_speed = -5;
+			break;
+		case 2:
+			ball_x_speed = (rand() % 3) - 1;
+			ball_y_speed = -7;
+			break;
+		case 3:
+			ball_x_speed = 5;
+			ball_y_speed = -5;
+			break;
+		case 4:
+			ball_x_speed = 7;
+			ball_y_speed = -3;
+			break;
+	}	
+}
+
 // TODO: GESTIRE CASO COLLISIONE CON SPIGOLO!!
 uint8_t ball_detect_collision() {
 	if (ball_x + ball_x_speed < BOARD_MIN_X) {	// LEFT WALL
@@ -37,7 +73,8 @@ uint8_t ball_detect_collision() {
 		return 4;
 	} else if (ball_y + ball_y_speed + BALL_SIZE >= PADDLE_Y ) {
 		if (ball_x + BALL_SIZE >= paddle_x && ball_x <= paddle_x + PADDLE_LENGTH) { // PADDLE
-			return 5;
+			if (ball_y_speed > 0) // Bounce only if the ball is falling
+				return 5;
 		}
 	}
 	return 0;
@@ -56,7 +93,8 @@ void ball_handle_collision(uint8_t collision_wall) {
 	else if (collision_wall == 2 || collision_wall == 4)
 		ball_y_speed = -ball_y_speed;
 	else if (collision_wall == 5) {
-		ball_y_speed = -ball_y_speed;
+		//ball_y_speed = -ball_y_speed;
+		ball_handle_paddle_collision();
 		increase_score();
 	}
 	
