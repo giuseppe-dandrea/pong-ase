@@ -23,7 +23,6 @@ void initialize_ball() {
 	ball_background_buffer_matrix = (uint16_t**) malloc(BALL_SIZE * sizeof(uint16_t *));
 	for (i = 0; i < BALL_SIZE; i++)
 		ball_background_buffer_matrix[i] = (uint16_t*) malloc(BALL_SIZE * sizeof(uint16_t));
-
 }
 
 void ball_handle_paddle_collision() {
@@ -96,12 +95,9 @@ void ball_handle_collision(uint8_t collision_wall) {
 	else if (collision_wall == 4)
 		pong_game_lost();
 	else if (collision_wall == 5) {
-		//ball_y_speed = -ball_y_speed;
 		ball_handle_paddle_collision();
 		increase_score();
 	}
-	
-	// BUFFER_FULL_FLAG = 0;
 	
 	return;
 }
@@ -109,13 +105,13 @@ void ball_handle_collision(uint8_t collision_wall) {
 
 uint8_t ball_detect_reserved_board_zone() {
 	// IF BALL IS IN SCORE ZONE
-	if (ball_y + ball_y_speed + BALL_SIZE >= SCORE_Y && ball_y + ball_y_speed <= SCORE_MAX_Y &&
-        ball_x + ball_x_speed + BALL_SIZE >= SCORE_X && ball_x + ball_x_speed <= SCORE_MAX_X)
+	if (ball_y + ball_y_speed + BALL_SIZE >= SCORE_Y - 5 && ball_y + ball_y_speed <= SCORE_MAX_Y &&
+        ball_x + ball_x_speed + BALL_SIZE >= SCORE_X - 5 && ball_x + ball_x_speed <= SCORE_MAX_X)
 		return 1;
 	
 	// IF BALL IS IN BEST SCORE ZONE
-	if (ball_y + ball_y_speed + BALL_SIZE >= BEST_SCORE_Y && ball_y + ball_y_speed <= BEST_SCORE_MAX_Y &&
-        ball_x + ball_x_speed + BALL_SIZE >= SCORE_X && ball_x + ball_x_speed <= BEST_SCORE_MAX_X)
+	if (ball_y + ball_y_speed + BALL_SIZE >= BEST_SCORE_Y - 5 && ball_y + ball_y_speed <= BEST_SCORE_MAX_Y &&
+        ball_x + ball_x_speed + BALL_SIZE >= SCORE_X - 5 && ball_x + ball_x_speed <= BEST_SCORE_MAX_X)
 		return 1;
 	
 	// IF BALL IS IN PADDLE ZONE
@@ -162,10 +158,7 @@ void move_ball() {
 	collision_wall = ball_detect_collision();
 	if (collision_wall) {
 		ball_handle_collision(collision_wall);
-	}
-	
-	//ball_detect_reserved_board_zone();
-	
+	}	
 	
 	ball_x += ball_x_speed;
 	ball_y += ball_y_speed;
