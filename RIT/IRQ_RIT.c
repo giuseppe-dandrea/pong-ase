@@ -9,6 +9,7 @@
 *********************************************************************************************************/
 #include "lpc17xx.h"
 #include "RIT.h"
+#include "../Pong/Pong.h"
 #include "../Paddle/paddle.h"
 #include "../Ball/ball.h"
 #include "../ADC/adc.h"
@@ -27,14 +28,20 @@ extern int GAME_ON, GAME_LOST, GAME_PAUSED;
 
 void button1_handler (void)
 {
+
 }
 
 void button2_handler (void)
 {
+
 }
 
 void button3_handler (void)
 {
+	if (GAME_PAUSED)
+		pong_resume_game();
+	else if (!GAME_PAUSED)
+		pong_pause_game();
 }
 
 void pong_ball_handler (void) {
@@ -68,12 +75,11 @@ void RIT_IRQHandler (void)
 			down=0;
 			button_pressed = 4;
 			reset_RIT();
-			NVIC_EnableIRQ(EINT0_IRQn);							 /* disable Button interrupts			*/
-			NVIC_EnableIRQ(EINT1_IRQn);							 /* disable Button interrupts			*/
-			NVIC_EnableIRQ(EINT2_IRQn);							 /* disable Button interrupts			*/
+			NVIC_EnableIRQ(EINT0_IRQn);							 /* enable Button interrupts			*/
+			NVIC_EnableIRQ(EINT1_IRQn);							 /* enable Button interrupts			*/
+			NVIC_EnableIRQ(EINT2_IRQn);							 /* enable Button interrupts			*/
 			LPC_PINCON->PINSEL4    |= (1 << button_pin*2);     /* External interrupt 0 pin selection */
 		}
-		
 	}
   LPC_RIT->RICTRL |= 0x1;	/* clear interrupt flag */
 	

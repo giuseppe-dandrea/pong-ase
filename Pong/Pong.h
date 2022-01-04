@@ -6,6 +6,11 @@
 
 #define GAME_LOST_STRING_X 85
 #define GAME_LOST_STRING_Y 140
+#define GAME_PAUSED_STRING_X 95
+#define GAME_PAUSED_STRING_Y 140
+#define GAME_CHAR_WIDTH  9
+#define GAME_CHAR_HEIGHT  17
+
 
 void pong_main_menu(void);
 void pong_initialize_game(void);

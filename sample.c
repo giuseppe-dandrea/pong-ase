@@ -22,6 +22,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "LPC17xx.h"
+#include "button_EXINT/button.h"
 #include "timer/timer.h"
 #include "Pong/Pong.h"
 #include "RIT/RIT.h"
@@ -40,6 +41,7 @@ uint8_t button_pressed = 4;
 int main(void)
 {
 ;	SystemInit();  												/* System Initialization (i.e., PLL)  */
+	BUTTON_init();												/* BUTTON Initialization              */
 	LCD_Initialization();
 	ADC_init();
 	//pong_main_menu();

@@ -9,6 +9,7 @@
 int GAME_ON;
 int GAME_LOST;
 int GAME_PAUSED;
+extern uint16_t ball_x, ball_y;
 
 
 void pong_main_menu() {	
@@ -36,4 +37,25 @@ void pong_game_lost() {
 	GUI_Text(GAME_LOST_STRING_X, GAME_LOST_STRING_Y, (uint8_t *) str, White, Black);
 	GAME_ON = 0;
 	GAME_LOST = 1;
+}
+
+void pong_pause_game(void) {
+	char str[] = "Pause";
+	GUI_Text(GAME_PAUSED_STRING_X, GAME_PAUSED_STRING_Y, (uint8_t *) str, White, Black);
+	GAME_ON = 0;
+	GAME_PAUSED = 1;
+}
+
+void clear_pause_string() {
+	int x, y;
+	for (x = GAME_PAUSED_STRING_X; x < GAME_PAUSED_STRING_X + GAME_CHAR_WIDTH * 5; x++)
+		for (y = GAME_PAUSED_STRING_Y; y < GAME_PAUSED_STRING_Y + GAME_CHAR_HEIGHT; y++)
+			LCD_SetPoint(x, y, Black);
+}
+
+void pong_resume_game(void) {
+	clear_pause_string();
+	draw_ball(ball_x, ball_y);
+	GAME_ON = 1;
+	GAME_PAUSED = 0;
 }
