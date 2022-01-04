@@ -24,29 +24,28 @@
 **
 ******************************************************************************/
 
-extern int GAME_ON, GAME_LOST, GAME_PAUSED;
+extern int GAME_ON, GAME_LOST, GAME_PAUSED, GAME_RESET;
 
 void button1_handler (void)
 {
-
+	if (!GAME_RESET)
+		pong_reset_game();
 }
 
 void button2_handler (void)
 {
-
+	if (!GAME_ON && !GAME_PAUSED)
+		pong_start_game();
 }
 
 void button3_handler (void)
 {
 	if (GAME_PAUSED)
 		pong_resume_game();
-	else if (!GAME_PAUSED)
+	else if (!GAME_PAUSED && GAME_ON)
 		pong_pause_game();
 }
 
-void pong_ball_handler (void) {
-	move_ball();
-}
 
 extern uint8_t button_pressed;
 uint8_t button_pin;
@@ -58,7 +57,7 @@ void RIT_IRQHandler (void)
 	if (button_pressed == 4 && GAME_ON) { // Dummy value to manage game cycle instead of buttons
 		disable_RIT();
 		ADC_start_conversion();
-		pong_ball_handler();
+		move_ball();
 		move_paddle_one_step_to_next_x();
 		reset_RIT();
 		enable_RIT();

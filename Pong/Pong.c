@@ -9,7 +9,8 @@
 int GAME_ON;
 int GAME_LOST;
 int GAME_PAUSED;
-extern uint16_t ball_x, ball_y;
+int GAME_RESET;
+extern uint16_t ball_x, ball_y, score;
 
 
 void pong_main_menu() {	
@@ -21,8 +22,7 @@ void pong_main_menu() {
 void pong_initialize_game() {
 	initialize_ball();
 	draw_initial_game_board();
-	//srand(time(NULL));
-	GAME_ON = 1;
+	GAME_ON = 0;
 }
 
 void pong_main_game_cycle() {
@@ -32,18 +32,25 @@ void pong_main_game_cycle() {
 	//}
 }
 
+void pong_start_game() {
+	GAME_ON = 1;
+	GAME_RESET = 0;
+	GAME_PAUSED = 0;
+}
+
 void pong_game_lost() {
 	char str[] = "You lose!";
-	GUI_Text(GAME_LOST_STRING_X, GAME_LOST_STRING_Y, (uint8_t *) str, White, Black);
 	GAME_ON = 0;
+	GAME_PAUSED = 0;
 	GAME_LOST = 1;
+	GUI_Text(GAME_LOST_STRING_X, GAME_LOST_STRING_Y, (uint8_t *) str, White, Black);
 }
 
 void pong_pause_game(void) {
 	char str[] = "Pause";
-	GUI_Text(GAME_PAUSED_STRING_X, GAME_PAUSED_STRING_Y, (uint8_t *) str, White, Black);
 	GAME_ON = 0;
 	GAME_PAUSED = 1;
+	GUI_Text(GAME_PAUSED_STRING_X, GAME_PAUSED_STRING_Y, (uint8_t *) str, White, Black);
 }
 
 void clear_pause_string() {
@@ -54,8 +61,17 @@ void clear_pause_string() {
 }
 
 void pong_resume_game(void) {
-	clear_pause_string();
-	draw_ball(ball_x, ball_y);
 	GAME_ON = 1;
 	GAME_PAUSED = 0;
+	clear_pause_string();
+	draw_ball(ball_x, ball_y);
+}
+
+void pong_reset_game(void) {
+	GAME_ON = 0;
+	GAME_PAUSED = 0;
+	GAME_RESET = 1;
+	score = 0;
+	reset_ball();
+	draw_reset_game_board();
 }

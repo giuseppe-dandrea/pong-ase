@@ -3,6 +3,7 @@
 #include "../Paddle/paddle.h"
 #include "../Ball/ball.h"
 #include "../GLCD_Extended/GLCD_Extended.h"
+#include "../Pong/Pong.h"
 
 
 int score = 0;
@@ -37,6 +38,20 @@ void draw_initial_game_board() {
 	draw_borders();
 	draw_ball(ball_x, ball_y);
 	draw_paddle(paddle_x, PADDLE_LENGTH);
+	draw_score();
+	draw_best_score();
+}
+
+void clear_central_text() {
+	int x, y;
+	for (x = 50; x < 190; x++)
+		for (y = GAME_LOST_STRING_Y; y < GAME_LOST_STRING_Y + 30; y++)
+			LCD_SetPoint(x, y, Black);
+}
+
+void draw_reset_game_board() {
+	clear_central_text();
+	draw_ball(ball_x, ball_y);
 	draw_score();
 	draw_best_score();
 }

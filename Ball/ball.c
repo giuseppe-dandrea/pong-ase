@@ -17,9 +17,18 @@ extern uint16_t paddle_x;
 
 extern int score;
 extern int best_score;
+extern int GAME_PAUSED;
+
+void reset_ball() {
+	ball_x = BALL_X_INITIAL;
+	ball_y = BALL_Y_INITIAL;
+	ball_x_speed = BALL_X_SPEED_INITIAL;
+	ball_y_speed = BALL_Y_SPEED_INITIAL;
+}
 
 void initialize_ball() {
 	int i;
+	reset_ball();
 	ball_background_buffer_matrix = (uint16_t**) malloc(BALL_SIZE * sizeof(uint16_t *));
 	for (i = 0; i < BALL_SIZE; i++)
 		ball_background_buffer_matrix[i] = (uint16_t*) malloc(BALL_SIZE * sizeof(uint16_t));
@@ -58,7 +67,10 @@ void ball_handle_paddle_collision() {
 			ball_x_speed = 7;
 			ball_y_speed = -3;
 			break;
-	}	
+	}
+	
+	ball_x_speed += (rand() % 3) - 1;
+	ball_y_speed += (rand() % 2) - 1;
 }
 
 // TODO: GESTIRE CASO COLLISIONE CON SPIGOLO!!
@@ -92,9 +104,12 @@ void ball_handle_collision(uint8_t collision_wall) {
 		ball_x_speed = -ball_x_speed;
 	else if (collision_wall == 2)
 		ball_y_speed = -ball_y_speed;
-	else if (collision_wall == 4)
+	else if (collision_wall == 4) {
+		BUFFER_FULL_FLAG = 0;
+		delete_ball();
+		reset_ball();
 		pong_game_lost();
-	else if (collision_wall == 5) {
+	} else if (collision_wall == 5) {
 		ball_handle_paddle_collision();
 		increase_score();
 	}
@@ -115,7 +130,8 @@ uint8_t ball_detect_reserved_board_zone() {
 		return 1;
 	
 	// IF BALL IS IN PADDLE ZONE
-	if (ball_y + ball_y_speed + BALL_SIZE > PADDLE_Y) {
+	if (ball_y + ball_y_speed + BALL_SIZE > PADDLE_Y && ball_y + ball_y_speed <= PADDLE_Y + PADDLE_THICKNESS &&
+		ball_x + ball_x_speed + BALL_SIZE > paddle_x && ball_x + ball_x_speed <= paddle_x + PADDLE_LENGTH) {
 		return 1;
 	}
 	return 0;
@@ -158,6 +174,8 @@ void move_ball() {
 	collision_wall = ball_detect_collision();
 	if (collision_wall) {
 		ball_handle_collision(collision_wall);
+		if (collision_wall == 4) // GAME_LOST
+			return;
 	}	
 	
 	ball_x += ball_x_speed;

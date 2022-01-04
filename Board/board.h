@@ -23,6 +23,7 @@
 #define BEST_SCORE_MAX_Y  BEST_SCORE_Y + SCORE_NUMBER_HEIGHT + 5
 
 void draw_initial_game_board(void);
+void draw_reset_game_board(void);
 void increase_score(void);
 
 #endif

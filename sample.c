@@ -37,6 +37,7 @@ uint8_t button_pressed = 4;
 
 // TODO: add buzzer sound
 // TODO: add button to pause, start, restart
+// TODO; add seed for random numbers
 
 int main(void)
 {
@@ -46,7 +47,7 @@ int main(void)
 	ADC_init();
 	//pong_main_menu();
 	pong_initialize_game();	
-	init_RIT(0x002C4B40);									/* RIT Initialization 50 msec       */
+	init_RIT(0x004C4B40);									/* RIT Initialization 50 msec       */
 	enable_RIT();
 	//pong_main_game_cycle();
 	
