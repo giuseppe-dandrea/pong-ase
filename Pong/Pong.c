@@ -3,6 +3,7 @@
 #include "../Paddle/paddle.h"
 #include "../Ball/ball.h"
 #include "../GLCD_Extended/GLCD_Extended.h"
+#include "../timer/timer.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -74,4 +75,19 @@ void pong_reset_game(void) {
 	score = 0;
 	reset_ball();
 	draw_reset_game_board();
+}
+
+void pong_play_sound(uint16_t freq) {
+	int k = 25000000 / (freq * 45);
+	disable_timer(0);
+	reset_timer(0);
+	init_timer(0, k);
+	enable_timer(0);
+}
+
+void pong_play_sound_wall(void) {
+	pong_play_sound(131);
+}
+void pong_play_sound_paddle(void) {
+	pong_play_sound(196);
 }

@@ -7,11 +7,8 @@
 ** Correlated files:    timer.h
 **--------------------------------------------------------------------------------------------------------
 *********************************************************************************************************/
-#include <string.h>
 #include "lpc17xx.h"
 #include "timer.h"
-#include "../GLCD/GLCD.h" 
-#include "../TouchPanel/TouchPanel.h"
 
 /******************************************************************************
 ** Function name:		Timer0_IRQHandler
@@ -23,37 +20,32 @@
 **
 ******************************************************************************/
 
+uint16_t SinTable[45] =                                       /* ÕýÏÒ±í                       */
+{
+    410, 467, 523, 576, 627, 673, 714, 749, 778,
+    799, 813, 819, 817, 807, 789, 764, 732, 694, 
+    650, 602, 550, 495, 438, 381, 324, 270, 217,
+    169, 125, 87 , 55 , 30 , 12 , 2  , 0  , 6  ,   
+    20 , 41 , 70 , 105, 146, 193, 243, 297, 353
+};
+
 void TIMER0_IRQHandler (void)
 {
-	/*
-	static int clear = 0;
-	char time_in_char[5] = "";
+	static int count = 0;
+	static int ticks=0;
+	if (count == 0)
+		count = 10;
+	if (count > 0) {
+		/* DAC management */	
+		LPC_DAC->DACR = SinTable[ticks]<<6;
+		ticks++;
+		if(ticks==45) ticks=0;
+		count--;
+		if (count == 0)
+			disable_timer(0);
+	}
+
 	
-  if(getDisplayPoint(&display, Read_Ads7846(), &matrix )){
-		if(display.y < 280){
-			TP_DrawPoint(display.x,display.y);
-			GUI_Text(200, 0, (uint8_t *) "     ", Blue, Blue);
-			clear = 0;
-		}
-		else{			
-			if(display.y <= 0x13E){			
-				clear++;
-				if(clear%20 == 0){
-					sprintf(time_in_char,"%4d",clear/20);
-					GUI_Text(200, 0, (uint8_t *) time_in_char, White, Blue);
-					if(clear == 200){	// 1 seconds = 200 times * 500 us
-						LCD_Clear(Blue);
-						GUI_Text(0, 280, (uint8_t *) " touch here : 1 sec to clear ", Blue, White);			
-						clear = 0;
-					}
-				}
-			}
-		}
-	}
-	else{
-		//do nothing if touch returns values out of bounds
-	}
-	*/
   LPC_TIM0->IR = 1;			/* clear interrupt flag */
   return;
 }

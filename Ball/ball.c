@@ -100,17 +100,20 @@ uint8_t ball_detect_collision() {
 *		5: paddle hit
 */
 void ball_handle_collision(uint8_t collision_wall) {
-	if (collision_wall == 1 || collision_wall == 3)
+	if (collision_wall == 1 || collision_wall == 3) {
 		ball_x_speed = -ball_x_speed;
-	else if (collision_wall == 2)
+		pong_play_sound_wall();
+	} else if (collision_wall == 2) {
 		ball_y_speed = -ball_y_speed;
-	else if (collision_wall == 4) {
+		pong_play_sound_wall();
+	} else if (collision_wall == 4) {
 		BUFFER_FULL_FLAG = 0;
 		delete_ball();
 		reset_ball();
 		pong_game_lost();
 	} else if (collision_wall == 5) {
 		ball_handle_paddle_collision();
+		pong_play_sound_paddle();
 		increase_score();
 	}
 	

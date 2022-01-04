@@ -13,6 +13,7 @@
 #include "../Paddle/paddle.h"
 #include "../Ball/ball.h"
 #include "../ADC/adc.h"
+#include "../timer/timer.h"
 
 /******************************************************************************
 ** Function name:		RIT_IRQHandler
