@@ -23,6 +23,8 @@ uint16_t potentiometer;
 uint16_t potentiometer_tmp = BOARD_MIN_X;
 uint16_t potentiometer_last = BOARD_MIN_X;		/* Last converted value               */
 
+extern int INIT_RAND_SEED;
+
 uint16_t map_potentiometer_to_x_pos(unsigned short potentiometer) {
 	return ((BOARD_MAX_X - PADDLE_LENGTH - BORDER_THICKNESS) * potentiometer / 0xFFF) + BOARD_MIN_X;
 }
@@ -31,6 +33,13 @@ void ADC_IRQHandler(void) {
 	static int count = 0;
 	uint16_t potentiometer_diff;
 	AD_current = ((LPC_ADC->ADGDR>>4) & 0xFFF);/* Read Conversion Result             */
+	
+	// Init the random seed and return if the flag is set
+	if (INIT_RAND_SEED) {
+		srand(AD_current);
+		return;
+	}
+	
 	if (count == 0)
 		potentiometer = map_potentiometer_to_x_pos(AD_current);
 	else {

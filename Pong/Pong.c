@@ -11,6 +11,7 @@ int GAME_ON;
 int GAME_LOST;
 int GAME_PAUSED;
 int GAME_RESET;
+uint16_t sound_duration = 0;
 extern uint16_t ball_x, ball_y, score;
 
 
@@ -26,21 +27,16 @@ void pong_initialize_game() {
 	GAME_ON = 0;
 }
 
-void pong_main_game_cycle() {
-	//while (1) {
-	//	move_paddle_absolute_position(190);
-	//	move_paddle_absolute_position(5);
-	//}
-}
-
 void pong_start_game() {
+	clear_central_text();
 	GAME_ON = 1;
 	GAME_RESET = 0;
 	GAME_PAUSED = 0;
 }
 
 void pong_game_lost() {
-	char str[] = "You lose!";
+	char str[] = "You Lose";
+	pong_play_sound_game_lost();
 	GAME_ON = 0;
 	GAME_PAUSED = 0;
 	GAME_LOST = 1;
@@ -73,21 +69,27 @@ void pong_reset_game(void) {
 	GAME_PAUSED = 0;
 	GAME_RESET = 1;
 	score = 0;
+	delete_ball();
 	reset_ball();
 	draw_reset_game_board();
 }
 
-void pong_play_sound(uint16_t freq) {
+void pong_play_sound(uint16_t freq, uint16_t duration) {
 	int k = 25000000 / (freq * 45);
+	sound_duration = duration;
 	disable_timer(0);
 	reset_timer(0);
 	init_timer(0, k);
 	enable_timer(0);
 }
 
+void pong_play_sound_game_lost(void) {
+	pong_play_sound(90, 2500);
+}
+
 void pong_play_sound_wall(void) {
-	pong_play_sound(131);
+	pong_play_sound(131, 10);
 }
 void pong_play_sound_paddle(void) {
-	pong_play_sound(196);
+	pong_play_sound(196, 50);
 }

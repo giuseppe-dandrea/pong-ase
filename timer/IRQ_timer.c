@@ -29,12 +29,14 @@ uint16_t SinTable[45] =                                       /* ÕýÏÒ±í         
     20 , 41 , 70 , 105, 146, 193, 243, 297, 353
 };
 
+extern uint16_t sound_duration;
+
 void TIMER0_IRQHandler (void)
 {
 	static int count = 0;
 	static int ticks=0;
 	if (count == 0)
-		count = 10;
+		count = sound_duration;
 	if (count > 0) {
 		/* DAC management */	
 		LPC_DAC->DACR = SinTable[ticks]<<6;

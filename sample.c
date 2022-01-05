@@ -34,8 +34,13 @@ extern uint8_t ScaleFlag; // <- ScaleFlag needs to visible in order for the emul
 #endif
 
 uint8_t button_pressed = 4;
+int INIT_RAND_SEED;
 
-// TODO; add seed for random numbers
+void init_rand_seed() {
+	INIT_RAND_SEED = 1;
+	ADC_start_conversion();
+	INIT_RAND_SEED = 0;
+}
 
 int main(void)
 {
@@ -43,11 +48,10 @@ int main(void)
 	BUTTON_init();												/* BUTTON Initialization              */
 	LCD_Initialization();
 	ADC_init();
-	//pong_main_menu();
+	init_rand_seed();
 	pong_initialize_game();	
 	init_RIT(0x004C4B40);									/* RIT Initialization 50 msec       */
 	enable_RIT();
-	//pong_main_game_cycle();
 	
 	LPC_SC->PCON |= 0x1;									/* power-down	mode										*/
 	LPC_SC->PCON &= ~(0x2);

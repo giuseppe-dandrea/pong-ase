@@ -25,5 +25,6 @@
 void draw_initial_game_board(void);
 void draw_reset_game_board(void);
 void increase_score(void);
+void clear_central_text(void);
 
 #endif

@@ -33,9 +33,15 @@ void draw_score() {
   GUI_Text(SCORE_X, SCORE_Y, (uint8_t *) str, White, Black);
 }
 
+void draw_welcome_message() {
+	GUI_Text(100, 100, (uint8_t *) "PONG", White, Black);
+	GUI_Text(40, 120, (uint8_t *) "Press KEY1 to start", White, Black);
+}
+
 void draw_initial_game_board() {
 	LCD_Clear(Black);
 	draw_borders();
+	draw_welcome_message();
 	draw_ball(ball_x, ball_y);
 	draw_paddle(paddle_x, PADDLE_LENGTH);
 	draw_score();
@@ -44,13 +50,14 @@ void draw_initial_game_board() {
 
 void clear_central_text() {
 	int x, y;
-	for (x = 50; x < 190; x++)
-		for (y = GAME_LOST_STRING_Y; y < GAME_LOST_STRING_Y + 30; y++)
+	for (y = 100; y < 138; y++)
+		for (x = 40; x < 200; x++)
 			LCD_SetPoint(x, y, Black);
 }
 
 void draw_reset_game_board() {
 	clear_central_text();
+	draw_welcome_message();
 	draw_ball(ball_x, ball_y);
 	draw_score();
 	draw_best_score();
