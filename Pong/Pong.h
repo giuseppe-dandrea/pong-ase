@@ -12,11 +12,7 @@
 #define GAME_CHAR_HEIGHT  17
 
 
-void pong_main_menu(void);
 void pong_initialize_game(void);
-void pong_main_game_cycle(void);
-void pong_draw_best_score(void);
-void pong_draw_score(void);
 void pong_start_game(void);
 void pong_game_lost(void);
 void pong_pause_game(void);
@@ -25,5 +21,6 @@ void pong_reset_game(void);
 void pong_play_sound_game_lost(void);
 void pong_play_sound_wall(void);
 void pong_play_sound_paddle(void);
+void pong_increase_score(void);
 
 #endif

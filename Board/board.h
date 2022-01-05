@@ -22,9 +22,10 @@
 #define BEST_SCORE_MAX_X  BEST_SCORE_X + SCORE_NUMBER_WIDTH * 4 + 5
 #define BEST_SCORE_MAX_Y  BEST_SCORE_Y + SCORE_NUMBER_HEIGHT + 5
 
-void draw_initial_game_board(void);
-void draw_reset_game_board(void);
-void increase_score(void);
-void clear_central_text(void);
+void board_draw_initial_game_board(void);
+void board_draw_reset_game_board(void);
+void board_draw_score(void);
+void board_draw_best_score(void);
+void board_clear_central_text(void);
 
 #endif

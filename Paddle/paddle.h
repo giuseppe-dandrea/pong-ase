@@ -11,12 +11,8 @@
 #define PADDLE_Y  (320 - PADDLE_Y_FROM_BOTTOM)
 #define PADDLE_COLOR  Green
 
-void draw_paddle(uint16_t x0, uint16_t length);
-
-void move_paddle_right(uint16_t distance);
-
-void move_paddle_absolute_position(uint16_t new_paddle_x);
-
-void move_paddle_one_step_to_next_x(void);
+void paddle_draw(uint16_t x0, uint16_t length);
+void paddle_update_position(uint16_t new_paddle_x);
+void paddle_move_one_step(void);
 
 #endif

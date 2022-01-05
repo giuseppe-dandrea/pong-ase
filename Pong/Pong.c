@@ -11,24 +11,22 @@ int GAME_ON;
 int GAME_LOST;
 int GAME_PAUSED;
 int GAME_RESET;
+
+int score = 0;
+int best_score = 100;
+
 uint16_t sound_duration = 0;
-extern uint16_t ball_x, ball_y, score;
+extern uint16_t ball_x, ball_y;
 
-
-void pong_main_menu() {	
-	LCD_Clear(Black);
-	GUI_Text(100, 80, (uint8_t *) "PONG", White, Black);
-	GUI_Text(40, 120, (uint8_t *) "Press KEY1 to start", White, Black);
-}
 
 void pong_initialize_game() {
-	initialize_ball();
-	draw_initial_game_board();
+	ball_initialize();
+	board_draw_initial_game_board();
 	GAME_ON = 0;
 }
 
 void pong_start_game() {
-	clear_central_text();
+	board_clear_central_text();
 	GAME_ON = 1;
 	GAME_RESET = 0;
 	GAME_PAUSED = 0;
@@ -61,7 +59,7 @@ void pong_resume_game(void) {
 	GAME_ON = 1;
 	GAME_PAUSED = 0;
 	clear_pause_string();
-	draw_ball(ball_x, ball_y);
+	ball_draw(ball_x, ball_y);
 }
 
 void pong_reset_game(void) {
@@ -69,9 +67,9 @@ void pong_reset_game(void) {
 	GAME_PAUSED = 0;
 	GAME_RESET = 1;
 	score = 0;
-	delete_ball();
-	reset_ball();
-	draw_reset_game_board();
+	ball_delete();
+	ball_reset();
+	board_draw_reset_game_board();
 }
 
 void pong_play_sound(uint16_t freq, uint16_t duration) {
@@ -84,7 +82,7 @@ void pong_play_sound(uint16_t freq, uint16_t duration) {
 }
 
 void pong_play_sound_game_lost(void) {
-	pong_play_sound(90, 2500);
+	pong_play_sound(90, 1250);
 }
 
 void pong_play_sound_wall(void) {
@@ -92,4 +90,15 @@ void pong_play_sound_wall(void) {
 }
 void pong_play_sound_paddle(void) {
 	pong_play_sound(196, 50);
+}
+
+void pong_increase_score() {
+	if (score > 100)
+		score += 5;
+	score += 5;
+	board_draw_score();
+	if (score > best_score) {
+		best_score = score;
+		board_draw_best_score();
+	}
 }

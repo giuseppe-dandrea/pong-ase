@@ -19,16 +19,16 @@ extern int score;
 extern int best_score;
 extern int GAME_PAUSED;
 
-void reset_ball() {
+void ball_reset() {
 	ball_x = BALL_X_INITIAL;
 	ball_y = BALL_Y_INITIAL;
 	ball_x_speed = BALL_X_SPEED_INITIAL;
 	ball_y_speed = BALL_Y_SPEED_INITIAL;
 }
 
-void initialize_ball() {
+void ball_initialize() {
 	int i;
-	reset_ball();
+	ball_reset();
 	ball_background_buffer_matrix = (uint16_t**) malloc(BALL_SIZE * sizeof(uint16_t *));
 	for (i = 0; i < BALL_SIZE; i++)
 		ball_background_buffer_matrix[i] = (uint16_t*) malloc(BALL_SIZE * sizeof(uint16_t));
@@ -108,13 +108,13 @@ void ball_handle_collision(uint8_t collision_wall) {
 		pong_play_sound_wall();
 	} else if (collision_wall == 4) {
 		BUFFER_FULL_FLAG = 0;
-		delete_ball();
-		reset_ball();
+		ball_delete();
+		ball_reset();
 		pong_game_lost();
 	} else if (collision_wall == 5) {
 		ball_handle_paddle_collision();
 		pong_play_sound_paddle();
-		increase_score();
+		pong_increase_score();
 	}
 	
 	return;
@@ -141,7 +141,7 @@ uint8_t ball_detect_reserved_board_zone() {
 }
 
 
-void draw_ball(uint16_t x0, uint16_t y0) {
+void ball_draw(uint16_t x0, uint16_t y0) {
 	int x, y, i, j;
 	uint8_t RESERVED_ZONE = ball_detect_reserved_board_zone();
 	if (RESERVED_ZONE)
@@ -155,7 +155,7 @@ void draw_ball(uint16_t x0, uint16_t y0) {
 }
 
 
-void delete_ball() {
+void ball_delete() {
 	int x, y, i, j;
 	for (x = ball_x, i = 0; x < ball_x + BALL_SIZE; x++, i++)
 		for (y = ball_y, j = 0; y < ball_y + BALL_SIZE; y++, j++) {
@@ -169,10 +169,10 @@ void delete_ball() {
 }
 
 
-void move_ball() {
+void ball_move() {
 	uint8_t collision_wall;
-	
-	delete_ball();
+
+	ball_delete();
 	
 	collision_wall = ball_detect_collision();
 	if (collision_wall) {
@@ -183,6 +183,6 @@ void move_ball() {
 	
 	ball_x += ball_x_speed;
 	ball_y += ball_y_speed;
-	draw_ball(ball_x, ball_y);
+	ball_draw(ball_x, ball_y);
 	
 }

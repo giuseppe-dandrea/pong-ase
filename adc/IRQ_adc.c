@@ -53,7 +53,7 @@ void ADC_IRQHandler(void) {
 	count++;
 
 	if(potentiometer != potentiometer_last && count > 1){
-		move_paddle_absolute_position(potentiometer);
+		paddle_update_position(potentiometer);
 		
 		potentiometer_last = potentiometer;
 		count = 0;

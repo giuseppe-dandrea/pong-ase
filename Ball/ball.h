@@ -11,10 +11,10 @@
 #define BALL_Y_SPEED_INITIAL 5
 
 
-void draw_ball(uint16_t x0, uint16_t y0);
-void delete_ball(void);
-void move_ball(void);
-void initialize_ball(void);
-void reset_ball(void);
+void ball_initialize(void);
+void ball_draw(uint16_t x0, uint16_t y0);
+void ball_delete(void);
+void ball_move(void);
+void ball_reset(void);
 
 #endif

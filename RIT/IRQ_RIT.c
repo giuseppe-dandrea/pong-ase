@@ -58,8 +58,8 @@ void RIT_IRQHandler (void)
 	if (button_pressed == 4 && GAME_ON) { // Dummy value to manage game cycle instead of buttons
 		disable_RIT();
 		ADC_start_conversion();
-		move_ball();
-		move_paddle_one_step_to_next_x();
+		ball_move();
+		paddle_move_one_step();
 		reset_RIT();
 		enable_RIT();
 		return;
