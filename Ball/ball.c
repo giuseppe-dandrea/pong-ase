@@ -73,7 +73,7 @@ void ball_handle_paddle_collision() {
 	ball_y_speed += (rand() % 2) - 1;
 }
 
-// TODO: GESTIRE CASO COLLISIONE CON SPIGOLO!!
+
 uint8_t ball_detect_collision() {
 	if (ball_x + ball_x_speed < BOARD_MIN_X) {	// LEFT WALL
 		return 1;

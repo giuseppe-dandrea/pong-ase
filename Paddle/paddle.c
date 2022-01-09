@@ -48,7 +48,7 @@ void paddle_move_one_step() {
 	if (paddle_x < paddle_x_next) {
 		paddle_move_right(min(PADDLE_MAX_SPEED, paddle_x_next - paddle_x));
 	}
-		// MOVE LEFT
+	// MOVE LEFT
 	else if (paddle_x > paddle_x_next) {
 		move_paddle_left(min(PADDLE_MAX_SPEED, paddle_x - paddle_x_next));
 	}
