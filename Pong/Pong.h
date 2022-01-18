@@ -14,6 +14,7 @@
 
 void pong_initialize_game(void);
 void pong_start_game(void);
+void pong_scored_point(void);
 void pong_game_lost(void);
 void pong_pause_game(void);
 void pong_resume_game(void);
@@ -22,5 +23,6 @@ void pong_play_sound_game_lost(void);
 void pong_play_sound_wall(void);
 void pong_play_sound_paddle(void);
 void pong_increase_score(void);
+void pong_increase_enemy_score(void);
 
 #endif

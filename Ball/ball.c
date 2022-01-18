@@ -16,8 +16,7 @@ uint8_t BUFFER_FULL_FLAG = 0;
 
 extern uint16_t paddle_x, enemy_paddle_x;
 
-extern int score;
-extern int best_score;
+extern int score, enemy_score;
 extern int GAME_PAUSED;
 
 void ball_reset() {
@@ -128,7 +127,7 @@ uint8_t ball_detect_collision() {
 			if (ball_y_speed > 0) // Bounce only if the ball is falling
 				return 5;
 		}
-	} else if (ball_y + ball_y_speed <= ENEMY_PADDLE_Y  && ball_y + ball_y_speed + BALL_SIZE >= ENEMY_PADDLE_Y - ENEMY_PADDLE_THICKNESS) {
+	} else if (ball_y + ball_y_speed <= ENEMY_PADDLE_Y + ENEMY_PADDLE_THICKNESS  && ball_y + ball_y_speed + BALL_SIZE >= ENEMY_PADDLE_Y) {
 		if (ball_x + BALL_SIZE >= enemy_paddle_x && ball_x <= enemy_paddle_x + ENEMY_PADDLE_LENGTH) { // ENEMY PADDLE
 			if (ball_y_speed < 0) // Bounce only if the ball is rising
 				return 6;
@@ -151,22 +150,18 @@ void ball_handle_collision(uint8_t collision_wall) {
 		pong_play_sound_wall();
 	} else if (collision_wall == 2) {
 		BUFFER_FULL_FLAG = 0;
-		ball_delete();
-		ball_reset();
-		pong_game_lost();
+		pong_increase_score();
+		pong_scored_point();
 	} else if (collision_wall == 4) {
 		BUFFER_FULL_FLAG = 0;
-		ball_delete();
-		ball_reset();
-		pong_game_lost();
+		pong_increase_enemy_score();
+		pong_scored_point();
 	} else if (collision_wall == 5) {
 		ball_handle_paddle_collision();
 		pong_play_sound_paddle();
-		pong_increase_score();
 	} else if (collision_wall == 6) {
 		ball_handle_enemy_paddle_collision();
 		pong_play_sound_paddle();
-		//pong_increase_enemy_score();
 	}
 	return;
 }
@@ -177,10 +172,10 @@ uint8_t ball_detect_reserved_board_zone() {
 	if (ball_y + ball_y_speed + BALL_SIZE >= SCORE_Y - 5 && ball_y + ball_y_speed <= SCORE_MAX_Y &&
         ball_x + ball_x_speed + BALL_SIZE >= SCORE_X - 5 && ball_x + ball_x_speed <= SCORE_MAX_X)
 		return 1;
-	
-	// IF BALL IS IN BEST SCORE ZONE
-	if (ball_y + ball_y_speed + BALL_SIZE >= BEST_SCORE_Y - 5 && ball_y + ball_y_speed <= BEST_SCORE_MAX_Y &&
-        ball_x + ball_x_speed + BALL_SIZE >= SCORE_X - 5 && ball_x + ball_x_speed <= BEST_SCORE_MAX_X)
+
+	// IF BALL IS IN ENEMY SCORE ZONE
+	if (ball_y + ball_y_speed + BALL_SIZE >= ENEMY_SCORE_Y - 5 && ball_y + ball_y_speed <= ENEMY_SCORE_MAX_Y &&
+		ball_x + ball_x_speed + BALL_SIZE >= ENEMY_SCORE_X - 5 && ball_x + ball_x_speed <= ENEMY_SCORE_MAX_X)
 		return 1;
 	
 	// IF BALL IS IN PADDLE ZONE
@@ -198,13 +193,13 @@ uint8_t ball_detect_reserved_board_zone() {
 }
 
 
-void ball_draw(uint16_t x0, uint16_t y0) {
+void ball_draw() {
 	int x, y, i, j;
 	uint8_t RESERVED_ZONE = ball_detect_reserved_board_zone();
 	if (RESERVED_ZONE)
 		BUFFER_FULL_FLAG = 1;
-	for (x = x0, i = 0; x < x0 + BALL_SIZE; x++, i++)
-		for (y = y0, j = 0; y < y0 + BALL_SIZE; y++, j++) {
+	for (x = ball_x, i = 0; x < ball_x + BALL_SIZE; x++, i++)
+		for (y = ball_y, j = 0; y < ball_y + BALL_SIZE; y++, j++) {
 			if (RESERVED_ZONE)
 				ball_background_buffer_matrix[i][j] = LCD_GetPointCustom(x, y);	// Save background before drawing ball in case of reserved zone
 			LCD_SetPoint(x, y, BALL_COLOR);
@@ -240,6 +235,6 @@ void ball_move() {
 	
 	ball_x += ball_x_speed;
 	ball_y += ball_y_speed;
-	ball_draw(ball_x, ball_y);
+	ball_draw();
 	
 }

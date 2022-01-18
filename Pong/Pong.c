@@ -13,6 +13,7 @@ int GAME_PAUSED;
 int GAME_RESET;
 
 int score = 0;
+int enemy_score = 0;
 int best_score = 100;
 
 uint16_t sound_duration = 0;
@@ -30,6 +31,17 @@ void pong_start_game() {
 	GAME_ON = 1;
 	GAME_RESET = 0;
 	GAME_PAUSED = 0;
+}
+
+void pong_scored_point() {
+	int i = 0;
+	GAME_ON = 0;
+	ball_delete();
+	ball_reset();
+	ball_draw();
+	for (i = 0; i < 500000; i++);
+	ball_delete();
+	GAME_ON = 1;
 }
 
 void pong_game_lost() {
@@ -59,7 +71,7 @@ void pong_resume_game(void) {
 	GAME_ON = 1;
 	GAME_PAUSED = 0;
 	clear_pause_string();
-	ball_draw(ball_x, ball_y);
+	ball_draw();
 }
 
 void pong_reset_game(void) {
@@ -93,12 +105,11 @@ void pong_play_sound_paddle(void) {
 }
 
 void pong_increase_score() {
-	if (score > 100)
-		score += 5;
-	score += 5;
+	score += 1;
 	board_draw_score();
-	if (score > best_score) {
-		best_score = score;
-		board_draw_best_score();
-	}
+}
+
+void pong_increase_enemy_score() {
+	enemy_score += 1;
+	board_draw_enemy_score();
 }

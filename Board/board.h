@@ -13,19 +13,19 @@
 
 #define SCORE_X  BOARD_MIN_X
 #define SCORE_Y  (BOARD_MAX_Y - 16) / 2
-#define BEST_SCORE_X  BOARD_MAX_X - 4 * 8
-#define BEST_SCORE_Y  BOARD_MIN_Y
 #define SCORE_NUMBER_WIDTH  9
 #define SCORE_NUMBER_HEIGHT  17
 #define SCORE_MAX_X  SCORE_X + SCORE_NUMBER_WIDTH * 4 + 5
 #define SCORE_MAX_Y  SCORE_Y + SCORE_NUMBER_HEIGHT + 5
-#define BEST_SCORE_MAX_X  BEST_SCORE_X + SCORE_NUMBER_WIDTH * 4 + 5
-#define BEST_SCORE_MAX_Y  BEST_SCORE_Y + SCORE_NUMBER_HEIGHT + 5
+#define ENEMY_SCORE_X BOARD_MAX_X - (SCORE_NUMBER_WIDTH+1)
+#define ENEMY_SCORE_Y SCORE_Y
+#define ENEMY_SCORE_MAX_X BOARD_MAX_X
+#define ENEMY_SCORE_MAX_Y SCORE_MAX_Y
 
 void board_draw_initial_game_board(void);
 void board_draw_reset_game_board(void);
 void board_draw_score(void);
-void board_draw_best_score(void);
+void board_draw_enemy_score(void);
 void board_clear_central_text(void);
 
 #endif
