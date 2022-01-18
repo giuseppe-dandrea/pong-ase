@@ -9,6 +9,7 @@
 *********************************************************************************************************/
 #include "lpc17xx.h"
 #include "timer.h"
+#include "../EnemyPaddle/enemyPaddle.h"
 
 /******************************************************************************
 ** Function name:		Timer0_IRQHandler
@@ -52,6 +53,8 @@ void TIMER0_IRQHandler (void)
   return;
 }
 
+extern int GAME_ON, GAME_LOST, GAME_PAUSED, GAME_RESET;
+
 
 /******************************************************************************
 ** Function name:		Timer1_IRQHandler
@@ -64,8 +67,16 @@ void TIMER0_IRQHandler (void)
 ******************************************************************************/
 void TIMER1_IRQHandler (void)
 {
-  LPC_TIM1->IR = 1;			/* clear interrupt flag */
-  return;
+	if (GAME_ON) {
+		disable_timer(1);
+		reset_timer(1);
+		enemy_paddle_find_next_position();
+		enemy_paddle_move_one_step();
+		enable_timer(1);
+	}
+	
+	LPC_TIM1->IR = 1;			/* clear interrupt flag */
+	return;
 }
 
 /******************************************************************************

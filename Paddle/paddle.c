@@ -8,7 +8,7 @@ uint16_t paddle_x_next = 100;
 
 
 void paddle_draw(uint16_t x0, uint16_t length) {
-	draw_thic_line_orizontal(x0, x0 + length, 278, 10, Green);
+	draw_thic_line_orizontal(x0, x0 + length, PADDLE_Y, PADDLE_THICKNESS, Green);
 }
 
 void paddle_move_right(uint16_t distance) {

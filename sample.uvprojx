@@ -621,6 +621,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>EnemyPaddle</GroupName>
+          <Files>
+            <File>
+              <FileName>enemyPaddle.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\EnemyPaddle\enemyPaddle.c</FilePath>
+            </File>
+            <File>
+              <FileName>enemyPaddle.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\EnemyPaddle\enemyPaddle.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
       </Groups>

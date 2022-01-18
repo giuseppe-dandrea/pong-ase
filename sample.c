@@ -51,7 +51,9 @@ int main(void)
 	init_rand_seed();
 	pong_initialize_game();	
 	init_RIT(0x004C4B40);									/* RIT Initialization 50 msec       */
+	init_timer(1, 0x002C4B40);
 	enable_RIT();
+	enable_timer(1);
 	
 	LPC_SC->PCON |= 0x1;									/* power-down	mode										*/
 	LPC_SC->PCON &= ~(0x2);

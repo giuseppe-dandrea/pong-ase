@@ -2,6 +2,7 @@
 #include "../Pong/Pong.h"
 #include "../Board/board.h"
 #include "../Paddle/paddle.h"
+#include "../EnemyPaddle/enemyPaddle.h"
 #include "../GLCD/GLCD.h"
 #include <stdlib.h>
 
@@ -13,7 +14,7 @@ int16_t ball_y_speed = 5;
 uint16_t **ball_background_buffer_matrix;
 uint8_t BUFFER_FULL_FLAG = 0;
 
-extern uint16_t paddle_x;
+extern uint16_t paddle_x, enemy_paddle_x;
 
 extern int score;
 extern int best_score;
@@ -73,9 +74,48 @@ void ball_handle_paddle_collision() {
 	ball_y_speed += (rand() % 2) - 1;
 }
 
+void ball_handle_enemy_paddle_collision() {
+	int ball_switch_position;
+	int ball_relative_position = ball_x - enemy_paddle_x;
+	if (ball_relative_position < 0)
+		ball_relative_position += BALL_SIZE;
+	else if (ball_relative_position > ENEMY_PADDLE_LENGTH)
+		ball_relative_position -= BALL_SIZE;
+	else
+		ball_relative_position += BALL_SIZE / 2;
+
+	ball_switch_position = ball_relative_position * 5 / ENEMY_PADDLE_LENGTH;
+
+	switch (ball_switch_position) {
+		case 0:
+			ball_x_speed = -7;
+			ball_y_speed = 3;
+			break;
+		case 1:
+			ball_x_speed = -5;
+			ball_y_speed = 5;
+			break;
+		case 2:
+			ball_x_speed = (rand() % 3) - 1;
+			ball_y_speed = 7;
+			break;
+		case 3:
+			ball_x_speed = 5;
+			ball_y_speed = 5;
+			break;
+		case 4:
+			ball_x_speed = 7;
+			ball_y_speed = 3;
+			break;
+	}
+
+	ball_x_speed += (rand() % 3) - 1;
+	ball_y_speed -= (rand() % 2) - 1;
+}
+
 
 uint8_t ball_detect_collision() {
-	if (ball_x + ball_x_speed < BOARD_MIN_X) {	// LEFT WALL
+	if (ball_x + ball_x_speed <= BOARD_MIN_X) {	// LEFT WALL
 		return 1;
 	} else if (ball_x + ball_x_speed + BALL_SIZE >= BOARD_MAX_X) { // RIGHT WALL
 		return 3;
@@ -88,6 +128,11 @@ uint8_t ball_detect_collision() {
 			if (ball_y_speed > 0) // Bounce only if the ball is falling
 				return 5;
 		}
+	} else if (ball_y + ball_y_speed <= ENEMY_PADDLE_Y  && ball_y + ball_y_speed + BALL_SIZE >= ENEMY_PADDLE_Y - ENEMY_PADDLE_THICKNESS) {
+		if (ball_x + BALL_SIZE >= enemy_paddle_x && ball_x <= enemy_paddle_x + ENEMY_PADDLE_LENGTH) { // ENEMY PADDLE
+			if (ball_y_speed < 0) // Bounce only if the ball is rising
+				return 6;
+		}
 	}
 	return 0;
 }
@@ -98,14 +143,17 @@ uint8_t ball_detect_collision() {
 *		3: right wall
 *		4: lower wall
 *		5: paddle hit
+*		6: enemy paddle hit
 */
 void ball_handle_collision(uint8_t collision_wall) {
 	if (collision_wall == 1 || collision_wall == 3) {
 		ball_x_speed = -ball_x_speed;
 		pong_play_sound_wall();
 	} else if (collision_wall == 2) {
-		ball_y_speed = -ball_y_speed;
-		pong_play_sound_wall();
+		BUFFER_FULL_FLAG = 0;
+		ball_delete();
+		ball_reset();
+		pong_game_lost();
 	} else if (collision_wall == 4) {
 		BUFFER_FULL_FLAG = 0;
 		ball_delete();
@@ -115,8 +163,11 @@ void ball_handle_collision(uint8_t collision_wall) {
 		ball_handle_paddle_collision();
 		pong_play_sound_paddle();
 		pong_increase_score();
+	} else if (collision_wall == 6) {
+		ball_handle_enemy_paddle_collision();
+		pong_play_sound_paddle();
+		//pong_increase_enemy_score();
 	}
-	
 	return;
 }
 
@@ -133,8 +184,14 @@ uint8_t ball_detect_reserved_board_zone() {
 		return 1;
 	
 	// IF BALL IS IN PADDLE ZONE
-	if (ball_y + ball_y_speed + BALL_SIZE > PADDLE_Y && ball_y + ball_y_speed <= PADDLE_Y + PADDLE_THICKNESS &&
+	if (ball_y + ball_y_speed + BALL_SIZE >= PADDLE_Y - 1 && ball_y + ball_y_speed <= PADDLE_Y + PADDLE_THICKNESS &&
 		ball_x + ball_x_speed + BALL_SIZE > paddle_x && ball_x + ball_x_speed <= paddle_x + PADDLE_LENGTH) {
+		return 1;
+	}
+
+	// IF BALL IS IN ENEMY PADDLE ZONE
+	if (ball_y + ball_y_speed <= ENEMY_PADDLE_Y + ENEMY_PADDLE_THICKNESS + 2 && ball_y + ball_y_speed + BALL_SIZE >= ENEMY_PADDLE_Y &&
+		ball_x + ball_x_speed + BALL_SIZE > enemy_paddle_x && ball_x + ball_x_speed <= enemy_paddle_x + ENEMY_PADDLE_LENGTH) {
 		return 1;
 	}
 	return 0;
