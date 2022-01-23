@@ -79,6 +79,7 @@ void pong_resume_game(void) {
 void pong_reset_game(void) {
 	GAME_ON = 0;
 	GAME_PAUSED = 0;
+	GAME_LOST = 0;
 	GAME_RESET = 1;
 	score = 0;
 	enemy_score = 0;

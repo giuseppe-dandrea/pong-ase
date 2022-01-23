@@ -18,6 +18,12 @@
 ** Version:                 v2.0
 ** Descriptions:            basic program for LCD and Touch Panel teaching
 **
+**--------------------------------------------------------------------------------------------------------
+** Modified by:              Giuseppe D'Andrea
+** Modified date:            23/01/2022
+** Version:                 v3.1
+** Descriptions:            Pong multiplayer
+**
 *********************************************************************************************************/
 
 /* Includes ------------------------------------------------------------------*/
@@ -27,9 +33,6 @@
 #include "Pong/Pong.h"
 #include "RIT/RIT.h"
 #include "ADC/adc.h"
-
-// TODO: fixare modo di reserved zone per i paddle (troppo buggata questa)
-// TODO: aggiungere controllo per punteggio = 5 e stampare schermata vittoria o sconfitta.
 
 #ifdef SIMULATOR
 extern uint8_t ScaleFlag; // <- ScaleFlag needs to visible in order for the emulator to find the symbol (can be placed also inside system_LPC17xx.h but since it is RO, it needs more work)
@@ -53,7 +56,7 @@ int main(void)
 	init_rand_seed();
 	pong_initialize_game();	
 	init_RIT(0x004C4B40);									/* RIT Initialization 50 msec       */
-	init_timer(1, 0x004C4B40);
+	init_timer(1, 0x003C4B40);
 	enable_RIT();
 	enable_timer(1);
 	

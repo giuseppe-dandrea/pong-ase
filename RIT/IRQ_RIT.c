@@ -35,7 +35,7 @@ void button1_handler (void)
 
 void button2_handler (void)
 {
-	if (!GAME_ON && !GAME_PAUSED)
+	if (!GAME_ON && !GAME_PAUSED && !GAME_LOST)
 		pong_start_game();
 }
 
