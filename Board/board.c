@@ -31,8 +31,18 @@ void board_draw_enemy_score() {
 }
 
 void board_draw_welcome_message() {
-	GUI_Text(100, 100, (uint8_t *) "PONG", White, Black);
+	GUI_Text(240 / 2 - (SCORE_NUMBER_WIDTH * 2), 100, (uint8_t *) "PONG", White, Black);
 	GUI_Text(40, 120, (uint8_t *) "Press KEY1 to start", White, Black);
+}
+
+void board_draw_win_board() {
+	GUI_Text(RESULT_X + (SCORE_NUMBER_WIDTH / 2), RESULT_Y, (uint8_t *) "You win", White, Black);
+	GUI_Text(ENEMY_RESULT_X, ENEMY_RESULT_Y, (uint8_t *) "You lose", White, Black);
+}
+
+void board_draw_lose_board() {
+	GUI_Text(RESULT_X, RESULT_Y, (uint8_t *) "You lose", White, Black);
+	GUI_Text(ENEMY_RESULT_X + (SCORE_NUMBER_WIDTH / 2), ENEMY_RESULT_Y, (uint8_t *) "You win", White, Black);
 }
 
 void board_draw_initial_game_board() {
@@ -53,8 +63,20 @@ void board_clear_central_text() {
 			LCD_SetPoint(x, y, Black);
 }
 
+void board_clear_results_text() {
+	int x, y;
+	for (y = ENEMY_RESULT_Y; y < ENEMY_RESULT_Y + SCORE_NUMBER_HEIGHT; y++)
+		for (x = ENEMY_RESULT_X; x < ENEMY_RESULT_X + SCORE_NUMBER_WIDTH * 7; x++)
+			LCD_SetPoint(x, y, Black);
+
+	for (y = RESULT_Y; y < RESULT_Y + SCORE_NUMBER_HEIGHT; y++)
+		for (x = RESULT_X; x < RESULT_X + SCORE_NUMBER_WIDTH * 7; x++)
+			LCD_SetPoint(x, y, Black);
+}
+
 void board_draw_reset_game_board() {
-	board_clear_central_text();
+	//board_clear_central_text();
+	board_clear_results_text();
 	board_draw_welcome_message();
 	ball_draw();
 	board_draw_score();
